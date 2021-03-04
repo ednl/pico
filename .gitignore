@@ -34,3 +34,5 @@
 # Build and VSCode directories
 build/
 .vscode/
+day24
+input*.txt
