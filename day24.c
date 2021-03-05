@@ -4,488 +4,19 @@
 #include <time.h>
 #include <stdint.h>
 #include "pico/stdlib.h"  // stdio_init, sleep_ms
+#include "day24-input.h"
 
-const char * const puzzle[] = {
-    "neswsesewswswswswswneeswswswswwwnwsw",
-    "nenesenenwneenwnwweneswnenenenwnw",
-    "wewnesesweswsenwnwnwsww",
-    "eeneswneewneseneeeseeweeesenwe",
-    "nwnenenenenenewnwnesenwnwnenenenenenwnese",
-    "nwwenwswwnwwwenwnwwnwnwwwnwnwsew",
-    "nwnwnenwnwnwnwnwnwswnwnenwswnwnwnenenwne",
-    "swsesenweseswseseswswnwswswswseesesesw",
-    "nweneneswnenenenenwnenwnwswswnwnwwswsenwne",
-    "wnwnwenwnwnwnwnwsewnwnenwnwwwsw",
-    "senwewwsewswswnwseswsenwswswsewnenww",
-    "nenwnesenwnenwnwnwnenwenwswnwnewnwswnw",
-    "neneswwsesenwsesewnenenenenenewenwne",
-    "weneneeneneneneeene",
-    "ewnwsenwwwwnwnewwneswnwsenwwnwsesww",
-    "neenwnwnenenenwwnwnwnenenenenwswnwnenwnwe",
-    "wwnwswwwnwwnwwwwwwnewnw",
-    "neneneneeneneneneneneswnenenenenenenene",
-    "nwwnenwnenwnenenenenesenenwnenenwnwnwne",
-    "nenenwsenwsesesenwwnwneenesewnenwnene",
-    "nenenewneneeneneneneeseneswnenenenwnene",
-    "seseenwewseswsese",
-    "seseeseseseseswsesesesesesesesenesesese",
-    "sewswswnwswswswswwew",
-    "wseswnwnwnwnenewnwnwwnwwnwnwnewnwsw",
-    "neeeenenwneeeeeeswneneneeneee",
-    "swnwnwnwnwnwnenenwnwewnwnwnenenwnwneenwne",
-    "swswsweswseeswseswneswwswseswnwsesww",
-    "swnewwnewwweewwwwnwsewwwww",
-    "eneswswwewwwswswesewwswswnwwe",
-    "eswnweeeeeneeeeeeesweeee",
-    "wswswnweswwswnewswseswswswswswswswe",
-    "nwewnwwwwnwwwwneswswwwwwnew",
-    "nwnwnwnwnwwnwnwwenwnwnwnwsenwnwnwswnwnw",
-    "swswnewswswswswwswswwwwweseswswswnww",
-    "swneewswswswwswnwnwswwnwwsenwswese",
-    "nenenenwswnenenwnenenwnwnwnenenwnenenwne",
-    "nwnwnwnwwneswswenwenwenwnwnwnww",
-    "neneseswnenwneneneneneenesw",
-    "nweswswnwsewswnwwseeseneswnwneene",
-    "wwwwswwwnwswwwswsewewwswwsw",
-    "wewswwewswswswnweswwswswsweswwsw",
-    "sesesesesesewseswsesesesesesenesenesesw",
-    "wsweeneeeeneeeene",
-    "eseeeeeeeeeeeenweseseseee",
-    "wesesewswnesewneeswseewsewnwesesw",
-    "seweeneneeweeeneneeeneneeseew",
-    "wswseswswwenwswwwswwwsw",
-    "eweweeewseneswseenweswnweswene",
-    "wwswwwwwwwsewnewswwwwswwww",
-    "swseewseneeneswswnewneesewsenwese",
-    "sewwwwwwwnwwwnwwww",
-    "seseneeseseeenwsesweseeeseswsesesese",
-    "neenewnwneneeeneseneneeneseeneneene",
-    "nwenwwwswnwwwwwnw",
-    "nwseswseseswneseeswneswswneswswsewswse",
-    "swswswwswwswwswnewwswwswwseswswe",
-    "wnwwnwwnwnwsenwnwnwwnww",
-    "swswnwseseseswsesesesewenesewenwsese",
-    "eseseesenweeseswseseenwee",
-    "nenwseseneeeeeenweseenweweee",
-    "swsweseswnwswswswswswswseswswswneseswsw",
-    "wnewenesenesweswwnwwseesesesee",
-    "wsesesesewseneseseesesesesesesesesesese",
-    "seeseeseeeseeswsweesesenwneenwnw",
-    "nwwnwnwnwsenwnwwswnwnwsenweswnwnwnwnwnee",
-    "esenenenenenenenenenewnewnenenenenene",
-    "eswswswswswwswswswwnwswswswswswwswsw",
-    "nwnenwnwenwesenwsewsenwwsewswnwsenw",
-    "nwnwnwwnwnwnwwnewwwnenwsenwnwwnwwsw",
-    "weeseswwenwnwwewwwwnwseenesw",
-    "wwswswswwswwwnwwwswsewswwsw",
-    "ewsewweswwwewwwwwwnwenwnw",
-    "eenwnwnewneweneswseenewseswwsesw",
-    "neenenenenenenewwneneseneneneeneene",
-    "seswnwswswseswswnwnwseseseeswseswswseswsesw",
-    "seseneswseewsesweseseseseseswnwsesesese",
-    "nwnwnwnwnwwnwnwnwnwnwenwnwwnwnwwnwnw",
-    "seswswsenwwseneseseseswswneseswnesesesesese",
-    "eseeseeeeeenweenwesweneenee",
-    "nwneswnwnwnwnwnwswneeseswenwswnwnwnww",
-    "swsesweswseswswnwswswswswswswnweswswsw",
-    "neseseesweseeeseeesewneeewsene",
-    "neneswnewneneswseswneswnenw",
-    "seweeweswwwnenesewwwnwnewsew",
-    "swwweswswswwswswwswswnwswswwswswsw",
-    "wneneenenesenewsenenwneswnewneenenw",
-    "senwnewnwnwnwnwnwnwwnwswwenwsesenwnwne",
-    "wwwwwwnwswsewwwwwwwsw",
-    "neneweneeeeenenweneeeeeenwsese",
-    "swswsweswswswswswswswswnwseseswswseseswsw",
-    "swswswswseswswnwswswseswswnwswneswsee",
-    "nwewnenwseneneswsenenenewnenwnesenwnenw",
-    "eseswnwswswseneswseseswswseeswswswwsw",
-    "seseeeseseseweneeseeeesesesesesese",
-    "eewnweswswsweeenenwwnwse",
-    "wwswwwswwsewwswnwenwnwswswwwesw",
-    "wwewwwwwwwswwwnewwwwww",
-    "nwenwwnwnwnwnwneseswnwnwnwnwnwnwnene",
-    "nwwnewnwnwwnwnwnwwnwnwsenwwwnwnwww",
-    "sewswneswseeswseneseswswswsewneseswnw",
-    "newneswswwwwsweswswenesesewneswsw",
-    "nwnewwwwwnwswwseswwwwnwwseese",
-    "wwwwnewwwwwwenewswwwwwsww",
-    "eseeeeeewseneswswseweeneesesee",
-    "nwnwnwswnenwnewnwenwnwnwsenwenenwnwwnwne",
-    "swseswseswsenesewswseseswswswseswsesese",
-    "swswsesesesweswnesesesewsese",
-    "eeweeeeseseeesee",
-    "swnwnwnwnenwnwnwnwnwnwnwnwnwnwwnwsenenw",
-    "nwwnwwwnwswwwwwwnwwewwewww",
-    "swnenenenenenenenenenenenenenenenenene",
-    "swswneswswswswswseswswnwswswswswswewsw",
-    "nwneswnwnenwnwnwnenwnenenenenwnwnenwnwenw",
-    "nwnwnwnenwnwnwnenwnwnwnwnenwsenwnwnwnwwnw",
-    "wnwnwwnwswwwsenwnwnwnwnwwnewseeww",
-    "nwenwnwnwenwnwwnwnwwsenwnwswwwnwnwnw",
-    "eeweeseseeeseseeseseseseseese",
-    "neeenesewswsweeneenweesenenwswesw",
-    "nwwnwnwnwewwnwnwnwwnwwnwnwnwewnwnw",
-    "wnwneswwwswwwewwwwswwsewwswne",
-    "nwnwsesenenwnenwswseswnenwwnwnenwnwnwnene",
-    "nenenwnwnewnwswnwnwnenwneneneeneenww",
-    "wwnwswnwnwnwnwnwswswsenwnwenwneesee",
-    "nenwnwnwnwnenenwnenwnesenenenenenwnwsenw",
-    "swseswswseswseseseswneseswswswseswswswsw",
-    "swswsweneswnwwsweswswswswswswswnesw",
-    "wnwwwwwwwwswwwewnewwnwwwwse",
-    "nwnenenenenenwnwnwwnwenwnwwsenesesenwnw",
-    "nenwneeeeeswswneeeeeneeeneswnee",
-    "nenwnwnwnwnwnwsenwwnwnwnwwnwnwnwsenesenw",
-    "nwnwwnwwswwwnwwnwwnwsewwnwnewnw",
-    "wnwwwwenwseswnwswewnww",
-    "ewwnwwwswwnwwnww",
-    "nwnenwnenenenenenenenewnesenene",
-    "sesesesweenwsenwenwsenweesenwenwnw",
-    "neneeeeswenwneeswsenwenenenenenenee",
-    "seeesenwswwesenwsesenwseseswesenesee",
-    "nenwnwnenwswnenwnwsenwnesenwnwnwnwnenenw",
-    "eeeeeeeeeeesweenwswne",
-    "esesweswnwsenweeesesesenweeesww",
-    "eseseeseseseseseweeseeeseesee",
-    "swnenenenwnwnesenenewnwneeneneneenenesw",
-    "neneneenenenenewneneneseneneneneeewse",
-    "wnwnwnwnwenwnwwewswwwwwnwsewwwe",
-    "neneeneneneneneneneneneswne",
-    "seswswseseeswswnwseseneswswseseseseswsese",
-    "wswnwswweneweenwwswswneswswwseswne",
-    "eswwwswswneswwswwnwwwenwwwswsewsw",
-    "wswswswswenwnwnwswswswswswswseswneeswe",
-    "wwwwwswswwwenenwnwnwwnenwsesww",
-    "wseweeenwnewneneneneseeneneenwswse",
-    "senwwnenwnwnewseswwwsewswnewneene",
-    "nenwnwnweneneenesesweneneneneneneswsw",
-    "swseswswswswwswswswneseswseswsewswswnesesw",
-    "enewnenwnenenenwsenenwnwnwnenenwseswene",
-    "wwnewwwswwwwwwwwwswsewwww",
-    "wsenwnwnewnwnwnwnwnwnwnwnwnwnwnwwnwnw",
-    "wenwnwwwwnwwsenwneswsewwsewnwnw",
-    "neenewneneeeneeee",
-    "neseswnwswswnwnwseseswseewseseneseswseswsw",
-    "nenenewwnenenewneeenenenweswsene",
-    "seeeeesesesweeenweesenwseeseswe",
-    "swesenweseewseeseeswswesenwenenewne",
-    "seseseseseseeeswnwswne",
-    "wwwwwwwwwwnwnwsewnwwwwsewe",
-    "nenwnwneeswnwnwenwswswnwnwnwswnwnwnwnwnwnw",
-    "swswswesewswswseswswswseswswseswswsw",
-    "neneenenenenenenenenenewnenenenenenene",
-    "wneseenenwnwwswseswswwnewnwwwww",
-    "nwnwnwwnwnwweseneswwnwseenwnwnwwnwsw",
-    "nwnwsenwnwnenwnwnwnwsenwnwnwnwsenwnwnewnwnw",
-    "wsewneeneneneneneneeeneswe",
-    "nenwnwnweweswneswne",
-    "eseeeeeseeeeeeeeeweewee",
-    "newnwswnenwneneneneeneweswnenwnee",
-    "wwnwwwwwwnwwnwnwnwsewnwwwww",
-    "wwnwwnwwnwswwnwwwwnwwwnweww",
-    "neseseseseseswsesesesesesesesesesesesesw",
-    "nenwnwnwnwswwnwwnwnwwnwswnwnwnwwnwnwe",
-    "neenweeeeeeeeeeneeswseeeswe",
-    "swswswswwswswnwswswsesweswswnwswwsw",
-    "wnwsenwwnwwnwnwnwnwnwnenwnwnwnwnwnwnw",
-    "seswnwswenesesewneswnwsewsesesenenesw",
-    "eneewnweseswweeenee",
-    "neeneswneswsweswwnenweee",
-    "eeseesenewneeeneneswenewne",
-    "swnwsewnwnwneweswnenwneneseesenwwsesw",
-    "wseewswwnenwswswseesweseneswnwswese",
-    "seseseseseswsesesewswseseswseseseseswnene",
-    "seseswsesesewnenewseneswnesew",
-    "wswseswnwwwwewwwwwswwwwswww",
-    "nwnwwnwnwnwnwnwnwnwnwwnwnwnwnwnwenwe",
-    "nenwsesenenenenenwnwnwnenwsenenwnwnenwnewne",
-    "nwnenenwnenwnwswnewnwnwenenwnwnwnwnene",
-    "neseswswnwnwnwneswsweneseseswswnwnewesw",
-    "swwsewwwewswswnwwswswwnwsw",
-    "neweeswneeeneeneneenwswneseewnw",
-    "sewswwweseenwneesewwsewswneee",
-    "wwwnwnwswwwwwwnenwnwnwnwnwnwwnw",
-    "wwwswwwwwwwwnewwwwneswwsew",
-    "nwseswswswneswenesewseeswswswswswnenw",
-    "enwswseeeseseswesesesesesenesenwseese",
-    "nenenwneswnwnwneneenwnwnweswnenwnwnwnwnw",
-    "nwswweneeeeeeeeeeneeeswnese",
-    "sweseseseseeeswenwneeeeese",
-    "seswswseeswsesewesweswswsesesesenwnwsesw",
-    "eenwnewesesewseneeswseewsweenwe",
-    "seseswnwwwnewwswweswnwwnewwesw",
-    "eeeeeeseseseeseweeeeeeseenew",
-    "weseeneswenwewe",
-    "swswsesenwseswseseswseneesewswsesesesese",
-    "seswseseswswswseseswswswneswswswsesesw",
-    "swwswwsewswwswnwwsesweswnwsenwnwnee",
-    "eneweeneneneeeeeeee",
-    "sesesesenesewsesese",
-    "nwnwnenwnewnenwnwnwsenenwnenwnwnwnwnwne",
-    "swneswseseswswnwseseseseseswwseswswsese",
-    "swswsewnewswwswswswswnenwwwneswsewsw",
-    "nwswswsweneseseswseneswseseswnweswew",
-    "swseswswswseswswswswseseswseswnesesw",
-    "nenwnenenwenwnwnwnwnenenwwwenwnenwne",
-    "swwnwnwwwwnwewwnwnwnwnwnwwnw",
-    "esenwneswnenwneeswwswenwseneseeenw",
-    "eeeswsenwweneenenenesenenewsenenesew",
-    "wwswsenwwwnewwewwswwswwwwne",
-    "wswesweenewswswnwswsweswnwnwswswe",
-    "swswseneswswswswsewswsw",
-    "wnenenenewneenesenwwseeneneswne",
-    "seeseseseeseenweewseseneseseeseese",
-    "seseesesewseseseseseesweseneseesese",
-    "swnwnwneseswswswswwe",
-    "senwnwnwnwnwnwswnwwnwnenenwwnwnwnwwnww",
-    "wwwsenwewwswswwnwsewwewswsww",
-    "swwswswswneseseseswsewseswswneswswsesw",
-    "seseeeseseseeseseseseseesewesesese",
-    "seseeeseweeneseewseeeeeseee",
-    "nesenwnwnenenenenwnwnwnwnwnwnenenwsenw",
-    "seseseeesesesenweseseeswseseseenese",
-    "swswswswswswswseswswswswswswswnenwswswswsw",
-    "senwwswwswswwswswwswswswneswsweswsw",
-    "swesenwswseswnwnwseseswseswswsweseesesw",
-    "wwswswwwswwweswwswswwswswwswsw",
-    "swewsweswswewnwwnewewwsewnwswww",
-    "wnewseseswswnwswwnwnwwnwswseswseeew",
-    "swsenwseseswswseneswswseseseswseseseswsw",
-    "swswwwewswswswwwweswwwwesww",
-    "swswswneeswnwswswswswswweswswswswswnwsw",
-    "enweneeseeneneswswsewneneneeeene",
-    "wswwswnwwwewwnwswesewswseenwe",
-    "sesesesweeeseeewsenwseseeeseeee",
-    "swswswswnwswswswswswswswsweswswseswswswsw",
-    "seseewseseeseesesesesesesesesenwsese",
-    "eweeseweeneeeeneeeeeeeeese",
-    "eeeeeeeeeeeeeeenweeeesw",
-    "nwswswswwwwwwwswswweswwwswswsw",
-    "weswswnwswweswnwnwneswsenesewwenesw",
-    "enweeseeseeneseseseewseeseeesesee",
-    "nwnwnwnwnenwwnwnwnwnwsesenwnwwwnwnwe",
-    "seseseeneseeseseeseeseeseeeweese",
-    "sesesweeswseswsenweswseswnwsenwswswsw",
-    "sesweseeeeeeenwseswnewse",
-    "swwnwwnewwwwwwnwwwwwnwnwww",
-    "swswswneswswswswswswwswwwswwswwesw",
-    "wnewneneweneeneseswsenewnesweneene",
-    "eseeeseeeseenesw",
-    "sesenwseneseseseseswswswsesesewsesesesesw",
-    "nwneneneneswnenwnwnenenwneenenwnwnenwnene",
-    "neneenewnenenenenenenesweeeeeesee",
-    "nenwwswnwenwnwnwsesenenww",
-    "eenweswsweeeeneeneeweneene",
-    "nenewwneseenwnenwnwsenwnenwwnw",
-    "wwwnenewwsenesenwnwsewewwswswswnew",
-    "seswwswneswswswwnwswwswwswswswwswwsw",
-    "ewneneeeeenweesweswenweneneene",
-    "sweswsenwswswwswnewnenewswenweenw",
-    "sweweseesesesesewsenwseeweenesenwse",
-    "swnwnwwwwwwwne",
-    "nwnwswswseswswswswwswswswswswswse",
-    "seswseseswswseseseeseswnwswsenweswseneswse",
-    "eeswnweseeneeeeseewseseseseesesee",
-    "swswswswswswseswwswsweswswneswswwnenw",
-    "wnwenwwwwnwwwwwnwwnwwww",
-    "swwswwswswswswswwswwnwswswswswswswse",
-    "nwwwwwswnwwnwwnwwwwnwnwneww",
-    "eeneswenwnwswnwsweswswnwswnenenwnwse",
-    "swswseswswseswswswswneswswseneswseswswse",
-    "neeeeeeeeeeneneweweeeene",
-    "nwnwneenwnwnwnwswneswnenesenwswewnww",
-    "weswwswswnesewsewswswwneneseeese",
-    "wswswswseswswnesesesw",
-    "enwneswwnenwnewnenwnweenwnenwneswnesene",
-    "eswwswswswswswwswswswwswswswnweswswsw",
-    "eswsenweswswnwswswswswsewswwwnwswswsw",
-    "nenwnenenenenwnenenewneenenenenwnenene",
-    "wnesesenewwwsewwwnwnwwnenwwswnewsw",
-    "wwswswwswwswswwswswwnwswseswswswsw",
-    "neneneneneswnenwnenenenwnwswnenwswnenee",
-    "sesesesenesesenesewsesenewseswsesesese",
-    "wneewseswwwnewswswswswenwnewwww",
-    "swwnwswswswswnwswswswwsesweswswwesw",
-    "seseswseswseseswseswnweseseseseswseswse",
-    "swswseseswswswswsesweswnwseeseswnwsese",
-    "neswswnwnwsewnwenwwnwwweenwsewnw",
-    "ewneeneneenesweneeeneeenenenene",
-    "nwnwwnenwnwwnwnwnwsewnw",
-    "eeneneeseenweseswneesweneenenenw",
-    "neneneneeneneeneswnwnwneswnenenenenenenwne",
-    "nwneneswsewswnwsewwnenwewnw",
-    "nenwsenenwnenenenwnesenenenenenenenenwse",
-    "seeeesesenwseeesesewsewseeseese",
-    "nenenenenenenesesewnenwnenenenwnwnwnenw",
-    "neeneneeewneeneneneneeneenenenee",
-    "wswnwswseewnwnweneewwneww",
-    "seseenwseweswnwneenenenenwnwseeneswse",
-    "seswsenwswseeseseswswswseswswseswsesenwsw",
-    "neseeseswseswsesewswswnwswwseswnenwsesw",
-    "nwnenwswnenenwnwnwnwnwsenwnw",
-    "nwnwwswnwwenwnwwnewnwnwnwwnwnwsenwnw",
-    "seseeswseenwnwseneseeeesesewswsesese",
-    "neneswnwenwnenenenenenenwnenwnwnwnwnwnesw",
-    "swswswseeswneswswswswswsweswwneswswswnw",
-    "swseswswswswswswneeswwswwswswswseswsesw",
-    "sesesesewnwseseseseseseseeseseseseswsese",
-    "neenenwwenwswnwneswsweenwnw",
-    "wwnwwwnwwnwwnwnwnwseenwwnwnwnwnwnw",
-    "swneswsesweswswswswswswswswwwswwsw",
-    "esweeneeneeeneenesweeee",
-    "eeeeeenweesweeeeeeweew",
-    "seseswswewseswwseeswenwnwswseswswse",
-    "nenesesesweswnenwewseewnwseswewne",
-    "eseweseseseseeesesesesesesesesesee",
-    "sesenwswseeswswsesesesenwseseseeneseese",
-    "swnwswswnwnwsenwneenwwnwnenwwneenwe",
-    "nwwwwnwnwnwnwnwwnwnwnwswewwwnwwnw",
-    "seseswsewesesewseseseseseseeseswsesese",
-    "senwswwnwnenweesewswenenwneneswswwne",
-    "eseweneswsesewwnwwseseswswnesenesew",
-    "swwswswswswseswswswswsweswswsw",
-    "eesenweweseseeeeeeeseeseseese",
-    "seeeeneenewweeene",
-    "nenwswswseeewsewwnwwnwwwswwsenw",
-    "swswswswwwnewwswnwwnewwewewsww",
-    "sewwswswneeswwnwswwwswnewswwswswsw",
-    "swwewwnwswswswnwnwweswneeeeww",
-    "swswwswswseeseswneeweswswnwnwswene",
-    "newwnwseesewsesenwsewseewesenwene",
-    "wswwwnwwsenwwnewwnwsewwnwwne",
-    "swswseseswnweswnwneeswneswsesesenwwswnesw",
-    "nwnwnwnwwnwnwnwsenwnwwnwsenwnwnwwnenwnw",
-    "nwswwenwswsweswwswswwseswswswnwsesw",
-    "nwewwwnwwsenwwwnwesw",
-    "wnwnwnwnwnwwnwsenwnwneswnwenwwsenwnw",
-    "swnenwnwwnwnenwnenenwnenwnwenwnwenwnwsw",
-    "swswnwswsweswwseswnwwswswnwsenwswew",
-    "eeeeneeswseeeeeeeeeenenwene",
-    "neeeneneneeeneeeeneswneneenenee",
-    "nwnwnwwnwnwneenwnwnwnwsenenwnwnwnwnwnw",
-    "eeeseeeswseenwenenwseeseeeesw",
-    "neeneneeesenweeeene",
-    "neneenenenesenenenenenenenenenenenenwne",
-    "senwwswswwswswsewneseeseswneswswswswene",
-    "neeeeneeeseseeeeseeseeseesesww",
-    "eeeneneenewneneseneneneeeeneee",
-    "swnwwnwsenenwnenwnwsenwnwnenewnwenwne",
-    "neneneneneenenenenwnenenwwsenenenenenenw",
-    "wwnewwwseswwnewww",
-    "nwenesenwnwnwnwnew",
-    "swseseswseswseswswswenwswswseswseneswse",
-    "senwswsweseneeeeneeneeswnesewswwnw",
-    "eenenwswswnwswewwneenwwwwsewsenw",
-    "seeeenenwneneeneeeneeswe",
-    "newenweeneswneneswne",
-    "swswswseswswsenewwnwwwnwnesweswwww",
-    "nwneneeeneswneneneneeneeneeneeene",
-    "eeeeeeesweeeeewnweseeenw",
-    "swseswswswswswsewneswnwswswsesesesesesese",
-    "nwnwsenenenwswnwnenenwwsenenwnenewseswse",
-    "wsewswwswwwswwnewseenenenewwwse",
-    "nwnewnenenenenenwnenenenenenenwnenwsenw",
-    "wnwwwsenewwnwwwwwwwwwwww",
-    "nenwnenewseeseeswswenwwsesewsw",
-    "enwnenesweneneneneswenenwswneneeenenene",
-    "seeeeeenwnweeseeseeswseseeeee",
-    "wwnwwnwswwwwnwwnenesww",
-    "seswswswneseseseseswseseseswsesesesewswse",
-    "wnenwseseeseswswwseseswswswswseswswseswsw",
-    "wnwnwnwneenesenwnwnwnwnwnwnw",
-    "nenenenwneeneneneneneneswnenwnenenenenwne",
-    "sewwswswswwswswwswwswnwseswwswneswsw",
-    "eeeneeeswsenwwseseeeeeeeseese",
-    "swswswswswswneswswswswswwswswswsw",
-    "newswwswwnenwsewwwwwwwwwswsew",
-    "sesesesenwseseseseseseeseseswsenwsesese",
-    "swswsesweswwseswwswnwswswswswswwnwnw",
-    "nenenwneneswnenwsenewnesesewnwnewnee",
-    "sesesesesewneseseseneseseseseseseswsesee",
-    "nenenenenwwnesesenenenesesenewneenwene",
-    "wnwwwwsewnwswneenwwenwswwwwww",
-    "swseswswnwswswseswswswnwswswseseeswswswswsw",
-    "wnwwnwwnwwwnewwwnwwswwwwwsewe",
-    "neeeeneneenenenesewneneeneeenene",
-    "seneenweeneeeeeneenweeeeseee",
-    "enewnenwsenenwnenenenenesenwnenenwnenenw",
-    "neeneneswneneweenwneneeneeenenee",
-    "wwwswwswsweswneswswwswsewswswww",
-    "swwwswswseswwwswswwsenenwswwwwnw",
-    "neenwneneneeseswswewnwswnenwnenenwnenwne",
-    "seeseewwweeseweseeseeesesenwe",
-    "swneneneneneneneneneneneeneneneneenene",
-    "wwswseesweswneenenwnwseesewswnwene",
-    "seseseswseswswseswseneseseswswseswsesesew",
-    "neeneneseenewenenwswnweeneeswneswne",
-    "seswwneswsewnwnewsenwswswenwww",
-    "wwsewwwwwwwnewswwewwwwwww",
-    "nenenenwnenenenenenwnesenenenenenenenene",
-    "eseswswswwnwswneswneseeswswswswswswswww",
-    "neeesweenewenenweneneewnenenenene",
-    "nwswwwnwwewswwswwwswseswwwwswswsw",
-    "wwenwnwewswwwnenwwwnewnwswww",
-    "nwneenenwswwwsewewwsesewwsewswnw",
-    "seswseneswseeenenwseeseswneswsesesesenw",
-    "eeseswweseeseseesesesesenw",
-    "neseseseewwwneseseenwseseeseseeee",
-    "seswnwsweseseeswseseswnwnwsesesenweseswe",
-    "neseseswswswswsesesw",
-    "nenenenewnenwnwnesenenenenwnenwwneneenene",
-    "sweseseeswsesenweseesesewsesenwenesee",
-    "senenenenwwnwwnesenenesenenwnwnwnewnwe",
-    "swwnwseneswseseseneseseneseswnwnesewwswse",
-    "wnwnwnewnwnwwnwnwnwwsenwswwnwnenwwww",
-    "wnewwwnwwwwwsewwwwwwwnwwnw",
-    "eeesenwenesenweenwesweneeeeee",
-    "wsesenewnenenenenw",
-    "eeeeeseneeweneeeeeeeeee",
-    "eneseneweneneeeeswneeneeneneww",
-    "nwnwnwnwnwnwnwenwnwnwwewnwnw",
-    "seseseswswseseseswsesesewseseseseseswne",
-    "swwwsweswswswswwswswswswswneww",
-    "seeenweseweseesesweeeeeenwe",
-    "nweneneeneeeeeeeeneseeeneene",
-    "wswnewwwwwwwwswswwwswewwww",
-    "swswswseswswswwseseswneswseswseseswswsesw",
-    "swswswswseswswswsenwnweswswswseswsewesw",
-    "nwswnwwnwswnwnwnenwnwenenwsenwne",
-    "nwwnwesenwnwnwnenwwwnwnwewnwnwnwnwswnw",
-    "wswswswnwwwwwneswwswwsewwswwsw",
-    "nenewneneneeneewnenenenenenenwnenenene",
-    "nwseseswswseseseeeseeseneseseseseese",
-    "eswseeseseeewnwseeseseeeseseesese",
-    "nenwnwnwneneeneneneneneneneneneneneswnw",
-    "nwnenwneneneneenwnenenenenenenwnewnene",
-    "nwneneenenenwseeseneeneeenenenewnene",
-    "wneseswsweswswsenwswswswsweeswnwswnw",
-    "swneeswsewswswenweneswnwnesewew",
-    "nwnwnwnwnwnenwnwnwnwsenwsenwwnwnwnwnwnwne",
-    "neswneswnewneswseseswnwnwswnewseswsee",
-    "eenenwseweeneeneneeweneweeene",
-    "nenwwwnwnwneenenenwswnwnwswseenwswnwenw",
-    "sweswnwswsweeswwswnenw",
-    "wsewsewsenwneswnwnwwewswnwweenw",
-    "nenwnenwswnwnenwnwnenenwnenwnenwnenenene",
-    "swwneswwewwswneswwwswswwswwwse",
-    "swsewswwsewwswneswswwseneswswswnesw",
-    "seenenwsweesenwseswnweseeeeenwe",
-    "swwswwswswswweswnwsweswswswswnenwwwsw",
-    "wnwnwwswenwweswenwwwwwnwnwswnw",
-    "swswwswwwswwwwsewwwwwswswwnesw",
-    "neswswswswswswswwswswswswwswswswwwe",
-    "wenwenwwseswwwnewnwseseswwneswneww",
-    "nwswswswneswswwwsewwswswswswswsesww"
-};
-
-// Puzzle input file name
+// Puzzle input file name not used
 // static const char *inp = "input24.txt";
 static const int turns = 100;
 
+// Parsed input
+static signed char *tile;
+static int lines = 0;
+
 // Hexagonal grid, max size to be determined
 static unsigned char *grid = NULL;
-static int midpoint = 0, width = 0, gridsize = 0;
+static int origx = 0, origy = 0, width = 0, height = 0, gridsize = 0;
 
 // Start or stop a timer
 static double timer(void)
@@ -510,20 +41,71 @@ static double timer(void)
     }
 }
 
-static int maxlinelen(void)
+static int countlines(void)
 {
-    int i, n, maxlen = 0;
-
-    for (i = 0; i < sizeof puzzle / sizeof *puzzle; ++i) {
-        n = strlen(puzzle[i]);
-        if (n > maxlen) {
-            maxlen = n;
-        }
-    }
-    return maxlen;
+    return (int)(sizeof puzzle / sizeof *puzzle);
 }
 
-static int counttiles(void)
+static void parseline(const char * const s, int * const dx, int * const dy)
+{
+    const char *c = s;
+    int x = 0, y = 0;
+
+    while (*c) {
+        if (*c == 'e') {
+            ++x;                  // E
+        } else if (*c == 'w') {
+            --x;                  // W
+        } else if (*c == 'n') {
+            --y;                  // NW
+            if (*(++c) == 'e') {
+                ++x;              // NE
+            }
+        } else if (*c == 's') {
+            ++y;                  // SE
+            if (*(++c) == 'w') {
+                --x;              // SW
+            }
+        }
+        ++c;
+    }
+    *dx = x;
+    *dy = y;
+}
+
+static void getdims(void)
+{
+    int i, x, y, minx = 0, maxx = 0, miny = 0, maxy = 0;
+
+    for (i = 0; i < sizeof puzzle / sizeof *puzzle; ++i) {
+        parseline(puzzle[i], &x, &y);
+        tile[i * 2    ] = (signed char)x;
+        tile[i * 2 + 1] = (signed char)y;
+        if (x < minx) {
+            minx = x;
+        } else if (x > maxx) {
+            maxx = x;
+        }
+        if (y < miny) {
+            miny = y;
+        } else if (y > maxy) {
+            maxy = y;
+        }
+    }
+    // Include border of zeros
+    origx = turns - minx + 1;
+    origy = turns - miny + 1;
+    width = turns * 2 + maxx - minx + 3;
+    height = turns * 2 + maxy - miny + 3;
+    gridsize = width * height;
+}
+
+static inline int ix(int x, int y)
+{
+    return width * y + x;
+}
+
+static int blacktiles(void)
 {
     int i, n = 0;
 
@@ -533,58 +115,17 @@ static int counttiles(void)
     return n;
 }
 
-static int ix(int x, int y)
-{
-    return width * y + x;
-}
-
 static void part1(void)
 {
-    int i, q, r;
-    const char *c;
-
-    for (i = 0; i < sizeof puzzle / sizeof *puzzle; ++i) {
-        c = puzzle[i];
-        q = r = midpoint;  // axial coordinates, start in middle
-        while (*c) {
-            if (*c == 'e') {
-                ++q;
-            } else if (*c == 'w') {
-                --q;
-            } else if (*c == 'n') {
-                --r;
-                if (*(++c) == 'e') {
-                    ++q;
-                }
-            } else if (*c == 's') {
-                ++r;
-                if (*(++c) == 'w') {
-                    --q;
-                }
-            }
-            ++c;
-        }
-        grid[ix(q, r)] ^= 1;
+    for (int i = 0; i < lines * 2; i += 2) {
+        grid[ix(origx + tile[i], origy + tile[i + 1])] ^= 1;
     }
-}
-
-static unsigned char neighbours(unsigned char *a, int x, int y)
-{
-    unsigned char n = 0;
-
-    n += a[ix(x + 1, y    )];  // E
-    n += a[ix(x - 1, y    )];  // W
-    n += a[ix(x + 1, y - 1)];  // NE
-    n += a[ix(x    , y - 1)];  // NW
-    n += a[ix(x    , y + 1)];  // SE
-    n += a[ix(x - 1, y + 1)];  // SW
-    return n;
 }
 
 static void part2(void)
 {
-    int x, y, i, j;
-    unsigned char t, n, *grid2, *a, *b, *tmp;
+    int x, y, i, j, n;
+    unsigned char t, *grid2, *a, *b, *tmp;
 
     grid2 = malloc((size_t)gridsize * sizeof *grid);
     memset(grid2, 0, gridsize);
@@ -592,11 +133,16 @@ static void part2(void)
     b = grid2;
     for (i = turns; i >= 1; --i) {
         // Use turn counter as reach limiter
-        for (y = i; y < width - i; ++y) {
+        for (y = i; y < height - i; ++y) {
             for (x = i; x < width - i; ++x) {
                 j = ix(x, y);
                 t = a[j];
-                n = neighbours(a, x, y);
+                n  = a[ix(x + 1, y    )];  // E
+                n += a[ix(x - 1, y    )];  // W
+                n += a[ix(x + 1, y - 1)];  // NE
+                n += a[ix(x    , y - 1)];  // NW
+                n += a[ix(x    , y + 1)];  // SE
+                n += a[ix(x - 1, y + 1)];  // SW
                 if (t == 0 && n == 2) {
                     b[j] = 1;
                 } else if (t == 1 && (n == 0 || n > 2)) {
@@ -621,15 +167,18 @@ void main(void)
     while (true) {
         timer();
 
-        midpoint = maxlinelen() + turns;
-        width = midpoint * 2 - 1;  // width and height of the grid
-        gridsize = width * width;  // array length
+        lines = countlines();
+        tile = malloc((size_t)(lines * 2) * sizeof *tile);
+        getdims();
         grid = malloc((size_t)gridsize * sizeof *grid);
         memset(grid, 0, gridsize);
+
         part1();
-        printf("Part 1: %d\n", counttiles());
+        printf("Part 1: %d\n", blacktiles());
+        free(tile);
+
         part2();
-        printf("Part 2: %d\n", counttiles());
+        printf("Part 2: %d\n", blacktiles());
         free(grid);
 
         printf("Time: %.5f s\n\n", timer());
