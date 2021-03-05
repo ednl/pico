@@ -4,7 +4,7 @@
 #include <time.h>
 #include <stdint.h>
 #include "pico/stdlib.h"  // stdio_init, sleep_ms
-#include "day24-input.h"
+#include "day24-input.h"  // char puzzle[][]
 
 // Puzzle input file name not used
 // static const char *inp = "input24.txt";
@@ -165,6 +165,7 @@ void main(void)
     stdio_init_all();
 
     while (true) {
+        sleep_ms(4000);  // sleep at start to give terminal connection some time
         timer();
 
         lines = countlines();
@@ -182,6 +183,5 @@ void main(void)
         free(grid);
 
         printf("Time: %.5f s\n\n", timer());
-        sleep_ms(4000);
     }
 }

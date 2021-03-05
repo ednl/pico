@@ -7,6 +7,9 @@ add_executable(Day24
     day24.c
     )
 
+# Diable Flash use, run from SRAM
+pico_set_binary_type(Day24 no_flash)
+
 # link pico standard library
 target_link_libraries(Day24 pico_stdlib)
 
